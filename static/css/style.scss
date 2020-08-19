@@ -1,0 +1,57 @@
+// https://coolors.co/114b5f-eb5160-9aa0a8-f6ca83
+$nav-background: #114B5F;
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+html, body {height: 100%;}
+h1, h2, h3, h4, h5, h6, p, img, div, span, body, html {margin: 0; padding: 0;}
+* {font-family: 'Barlow', sans-serif;}
+
+.nav {
+    width: 100%;
+    height: 70px;
+    box-shadow: 0 0 10px rgb(190, 190, 190);
+    background-color: $nav-background;
+    div {
+        float: left;
+    }
+    .logo {
+        img {
+            height: 40px;
+            margin: 15px 30px;
+        }
+    }
+    .search input {
+        width: 400px;
+        background-color: rgb(230, 230, 230);
+        border: none;
+        height: 40px;
+        margin: 15px 0;
+        border-radius: 3px;
+        font-size: 20px;
+        padding: 0 15px;
+        box-sizing: border-box;
+        transition: 0.3s;
+        &:focus {
+            outline: none;
+            background-color: #FFF;
+        }
+    }
+    .links {
+        float: right;
+        a {
+            line-height: 70px;
+            height: 70px;
+            display: inline-block;
+            padding: 0 15px;
+            font-size: 25px;
+            color: #FFF;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            &:hover {
+                background-color: darken($nav-background, 5);
+            }
+        }
+    }
+}

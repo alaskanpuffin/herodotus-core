@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Herodotus Archives</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+        <link href="{% static 'fonts/fontawesome/css/all.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <div class="nav">
+            <div class="logo">
+                <img src="{% static 'assets/logo_white.png' %}">
+            </div>
+            <div class="search">
+                <input type="text" placeholder="Search">
+            </div>
+            <div class="links">
+                <a href="#"><i class="fa fa-plus"></i></a>
+                <a href="#"><i class="fa fa-users-cog"></i></a>
+            </div>
+        </div>
+    </body>
+</html>
