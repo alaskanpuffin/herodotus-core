@@ -1,0 +1,40 @@
+{% extends 'page_structure.html' %}
+
+{% block title %}Add Content | {% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12 mt-5">
+            <div class="content">
+                <h1>Add Content</h1>
+                <div class="article-form">
+                    <div id="title"></div>
+                    <br>
+                    <div id="content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var title = tinymce.init({
+        selector: '#title',
+        inline: true,
+        menubar: false,
+        placeholder: 'Add title here...',
+        toolbar: 'undo redo',
+        plugins: "paste",
+        paste_as_text: true
+      });
+    var content = tinymce.init({
+        selector: '#content',
+        inline: true,
+        menubar: false,
+        placeholder: 'Add content here...',
+        toolbar: 'undo redo | bold italic underline',
+        plugins: "paste",
+        paste_as_text: true
+      });
+</script>
+{% endblock %}

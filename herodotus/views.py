@@ -4,5 +4,8 @@ from django.shortcuts import render, redirect
 
 class HomeView(TemplateView):
     def get(self, request):
-        response = render(request, 'home.html', {})
-        return response
+        return render(request, 'home.html', {})
+
+class AddContentView(TemplateView):
+    def get(self, request):
+        return render(request, 'addcontent.html', {})
