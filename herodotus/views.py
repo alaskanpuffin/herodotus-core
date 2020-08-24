@@ -1,11 +1,11 @@
-from django.views.generic import TemplateView
-from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from .models import Content
+from .serializers import ContentSerializer
+from rest_framework import generics
 
-class HomeView(TemplateView):
-    def get(self, request):
-        return render(request, 'home.html', {})
+class ContentList(generics.ListCreateAPIView):
+    queryset = Content.objects.all()
+    serializer_class = ContentSerializer
 
-class AddContentView(TemplateView):
-    def get(self, request):
-        return render(request, 'addcontent.html', {})
+class ContentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Content.objects.all()
+    serializer_class = ContentSerializer

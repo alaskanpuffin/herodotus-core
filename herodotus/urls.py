@@ -15,10 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import HomeView, AddContentView
+from .views import ContentList, ContentDetail
+from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', HomeView.as_view()),
-    path('add/', AddContentView.as_view()),
+    path('content/', ContentList.as_view()),
+    path('content/<int:pk>/', ContentDetail.as_view()),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
