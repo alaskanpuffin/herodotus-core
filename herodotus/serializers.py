@@ -7,3 +7,10 @@ class ContentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Content
         fields = ['id' ,'content_type', 'url', 'author', 'date', 'title', 'content']
+
+class ScrapedArticleSerializer(serializers.Serializer):
+    url = serializers.CharField()
+    title = serializers.CharField()
+    content = serializers.CharField()
+    author = serializers.CharField()
+    date = serializers.DateTimeField(format='%m/%d/%Y')
