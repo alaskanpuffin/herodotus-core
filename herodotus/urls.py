@@ -15,16 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path, include
-from .views import ContentViewSet, ScrapeArticle
+from .views import ContentViewSet, ScrapeArticle, CheckToken, UserViewSet
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'content', ContentViewSet)
+router.register(r'user', UserViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('scrapearticle/', ScrapeArticle.as_view()),
+    path('checktoken/', CheckToken.as_view()),
     path('', include(router.urls)),
     re_path(r'api/auth/', include('knox.urls')),
 ]
