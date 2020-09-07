@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from newspaper import Article
 from rest_framework import permissions
 from .pagination import ContentPagination
+import os
 from django.db.models import Case, When
 import meilisearch
 
@@ -25,8 +26,8 @@ class SearchContent(generics.ListCreateAPIView):
 
         search = request.GET.get('q')
         
-        client = meilisearch.Client('http://192.168.0.25:7700')
-        index = client.get_index('article')
+        client = meilisearch.Client(os.environ['MEILI_SEARCH_URL'], os.environ['MEILI_SEARCH_MASTER_KEY'])
+        index = client.get_or_create_index('article', {'primaryKey': 'article_id'})
 
         results = index.search(search)
 
@@ -64,6 +65,25 @@ class ScrapeArticle(views.APIView):
 
         results = ScrapedArticleSerializer(data, many=False).data
         return Response(results)
+
+class IndexArticles(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        client = meilisearch.Client(os.environ['MEILI_SEARCH_URL'], os.environ['MEILI_SEARCH_MASTER_KEY'])
+        index = client.get_or_create_index('article', {'primaryKey': 'article_id'})
+        documents = []
+
+        contentQuerySet = Content.objects.all()
+
+        for article in contentQuerySet:
+            documents.append({'article_id': article.id, 'content': article.content, 'title': article.title, 'author': article.author})
+
+        index.delete_all_documents()
+        index.add_documents(documents)
+
+        
+        return Response({'completed': True})
 
 
 class CheckToken(views.APIView):
