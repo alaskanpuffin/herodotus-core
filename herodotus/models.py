@@ -15,3 +15,6 @@ class Content(models.Model):
     date = models.DateField(blank=True, null=True)
     title = models.CharField(max_length=500)
     content = models.TextField()
+
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
