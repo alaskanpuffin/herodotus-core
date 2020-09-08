@@ -1,7 +1,5 @@
 FROM python:slim
 
-RUN apt-get update
-
 RUN mkdir /app /app/data
 
 WORKDIR /app
