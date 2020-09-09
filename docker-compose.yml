@@ -1,0 +1,41 @@
+version: "3.3"
+services:
+  core:
+    image: alaskanpuffin/herodotus-core:latest
+    volumes:
+      - "herodotus:/app/data"
+    networks:
+      - herodotus-network
+    links:
+      - meilisearch
+    depends_on:
+      - meilisearch
+    ports:
+      - "8080:8080"
+    environment:
+      - MEILI_SEARCH_URL=http://meilisearch:7700
+      - MEILI_SEARCH_MASTER_KEY=<MEILI_MASTER_KEY>
+      - SECRET_KEY=<SECRET_KEY>
+
+  web:
+    image: alaskanpuffin/herodotus-web:latest
+    ports:
+      - "80:80"
+    environment:
+      - VUE_APP_API_ROOT=http://<HERODOTUS-CORE-IP/HOSTNAME>:8080 # Do not include a trailing slash
+
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    networks:
+      - herodotus-network
+    expose:
+      - "7700"
+    environment:
+      - MEILI_ENV=production
+      - MEILI_MASTER_KEY=<MEILI_MASTER_KEY>
+
+volumes:
+  herodotus:
+
+networks:
+  herodotus-network:
