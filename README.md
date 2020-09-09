@@ -26,3 +26,7 @@ Due to the split nature of Herodotus, the easiest method of installation is usin
   - <HERODOTUS-CORE-IP/HOSTNAME> = Change <HERODOTUS-CORE-IP/HOSTNAME> to the IP address or hostname of the server running herodotus. If the IP address or hostname of the server changes, you will need to update this value. Setting a static IP address on the server is recommended.
 - After making the necessary changes, run `docker-compose up`. Note: Docker may require root priviledges, if you receive an error, try running the previous command as sudo. 
 - Congratulations! Herodotus has been installed, you can access the web interface by opening the IP address or hostname of the server in a browser. The default user credentials are Username: `admin` Password: `admin`.
+
+
+## Attribution
+Icon by [Freepik](https://www.flaticon.com/authors/freepik)
