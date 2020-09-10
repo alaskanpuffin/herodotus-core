@@ -8,7 +8,7 @@ class ContentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Content
         fields = ['id', 'content_type', 'url',
-                  'author', 'date', 'title', 'content']
+                  'author', 'date', 'title', 'content', 'richtext']
 
 
 class ScrapedArticleSerializer(serializers.Serializer):
