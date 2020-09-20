@@ -1,4 +1,4 @@
-from .models import Content, User
+from .models import Content, User, Feed
 from rest_framework import serializers
 
 class ContentSerializer(serializers.HyperlinkedModelSerializer):
@@ -8,7 +8,15 @@ class ContentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Content
         fields = ['id', 'content_type', 'url',
-                  'author', 'date', 'title', 'content', 'richtext']
+                  'author', 'publisher', 'date', 'title', 'content', 'richtext']
+
+class FeedSerializer(serializers.HyperlinkedModelSerializer):
+    last_updated = serializers.DateTimeField(
+        required=False, allow_null=True)
+
+    class Meta:
+        model = Feed
+        fields = ['id', 'title', 'url', 'last_updated']
 
 
 class ScrapedArticleSerializer(serializers.Serializer):

@@ -1,5 +1,5 @@
-from .models import Content, User
-from .serializers import ContentSerializer, ScrapedArticleSerializer, UserSerializer
+from .models import Content, User, Feed
+from .serializers import ContentSerializer, ScrapedArticleSerializer, UserSerializer, FeedSerializer
 from rest_framework import generics, viewsets, views
 from rest_framework.response import Response
 from newspaper import Article
@@ -14,6 +14,11 @@ class ContentViewSet(viewsets.ModelViewSet):
     queryset = Content.objects.order_by('-id')
     serializer_class = ContentSerializer
     pagination_class = ContentPagination
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+class FeedViewSet(viewsets.ModelViewSet):
+    queryset = Feed.objects.order_by('-id')
+    serializer_class = FeedSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class SearchContent(generics.ListCreateAPIView):
@@ -77,7 +82,7 @@ class IndexArticles(views.APIView):
         contentQuerySet = Content.objects.all()
 
         for article in contentQuerySet:
-            documents.append({'article_id': article.id, 'content': article.content, 'title': article.title, 'author': article.author})
+            documents.append({'article_id': article.id, 'content': article.content, 'title': article.title, 'author': article.author, 'publisher': article.publisher, 'date': str(article.date)})
 
         index.delete_all_documents()
         index.add_documents(documents)

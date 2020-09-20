@@ -15,7 +15,7 @@ class Command(BaseCommand):
         contentQuerySet = Content.objects.all()
 
         for article in contentQuerySet:
-            documents.append({'article_id': article.id, 'content': article.content, 'title': article.title, 'author': article.author})
+            documents.append({'article_id': article.id, 'content': article.content, 'title': article.title, 'author': article.author, 'publisher': article.publisher, 'date': str(article.date)})
 
         index.delete_all_documents()
         index.add_documents(documents)
