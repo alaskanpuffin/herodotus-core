@@ -16,6 +16,10 @@ services:
       - MEILI_SEARCH_URL=http://meilisearch:7700
       - MEILI_SEARCH_MASTER_KEY=<MEILI_MASTER_KEY>
       - SECRET_KEY=<SECRET_KEY>
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-exec.pullfeeds.schedule: "@every 1h" # Frequency the feeds are pulled for new articles
+      ofelia.job-exec.pullfeeds.command: "python /app/manage.py pull_feeds"
 
   web:
     image: alaskanpuffin/herodotus-web:latest
@@ -33,6 +37,14 @@ services:
     environment:
       - MEILI_ENV=production
       - MEILI_MASTER_KEY=<MEILI_MASTER_KEY>
+
+  ofelia:
+    image: mcuadros/ofelia:latest
+    depends_on:
+      - core
+    command: daemon --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 volumes:
   herodotus:
