@@ -13,6 +13,13 @@ class Feed(models.Model):
     url = models.CharField(max_length=500)
     last_updated = models.DateTimeField(blank=True, null=True)
 
+class FeedHistory(models.Model):
+    url = models.CharField(max_length=500)
+    feed = models.ForeignKey(
+        'Feed',
+        on_delete=models.CASCADE,
+    )
+
 class Content(models.Model):
     TYPE_CHOICES = {
         ('article', 'article'),

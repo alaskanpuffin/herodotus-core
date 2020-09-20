@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from herodotus.models import Feed, Content
+from herodotus.models import Feed, FeedHistory, Content
 import os
 import feedparser
 from newspaper import Article
@@ -25,11 +25,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         feeds = Feed.objects.all()
         contentObj = Content.objects.all()
+        feedHistoryObj = FeedHistory.objects.all()
 
         for feed in feeds:
             content = feedparser.parse(feed.url)
             for entry in content.entries:
-                if not contentObj.filter(url=entry.link).exists():
+                if not contentObj.filter(url=entry.link).exists() and not feedHistoryObj.filter(url=entry.link).exists():
                     article = self.scrapeArticle(entry.link)
 
                     date = entry.published_parsed
@@ -37,8 +38,10 @@ class Command(BaseCommand):
 
                     articleObj = Content(
                         title=article['title'], content_type="article", publisher=feed.title, content=article['content'], url=entry.link, author=article['author'][:300], date=date)
+                    feedHistoryEntryObj = FeedHistory(feed=feed, url=entry.link)
                     try:
                         articleObj.save()
+                        feedHistoryEntryObj.save() # Prevent duplicate pulls if an article is deleted.
                     except:
                         print("Error saving article")
 
