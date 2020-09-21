@@ -27,6 +27,17 @@ Due to the split nature of Herodotus, the easiest method of installation is usin
 - After making the necessary changes, run `docker-compose up`. Note: Docker may require root priviledges, if you receive an error, try running the previous command as sudo. 
 - Congratulations! Herodotus has been installed, you can access the web interface by opening the IP address or hostname of the server in a browser. The default user credentials are Username: `admin` Password: `admin`.
 
+## Screenshots
+![screen1](https://user-images.githubusercontent.com/38274055/93726297-b8db4a00-fb61-11ea-870c-1e21634c9b4e.jpg)
+
+![screen2](https://user-images.githubusercontent.com/38274055/93726306-c1cc1b80-fb61-11ea-96af-064300e2c3a6.jpg)
+
+![screen3](https://user-images.githubusercontent.com/38274055/93726303-bd076780-fb61-11ea-8481-fbd376114077.jpg)
+
+![screen4](https://user-images.githubusercontent.com/38274055/93726305-c09aee80-fb61-11ea-9abf-5d72a9b2e480.jpg)
+
+Demo Video: https://youtu.be/7BvKh9GpGXk
+
 
 ## Attribution
 Icon by [Freepik](https://www.flaticon.com/authors/freepik)
