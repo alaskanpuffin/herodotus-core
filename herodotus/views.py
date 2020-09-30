@@ -8,6 +8,7 @@ from .pagination import ContentPagination
 import os
 from django.db.models import Case, When
 import meilisearch
+from django.conf import settings
 
 
 class ContentViewSet(viewsets.ModelViewSet):
@@ -99,3 +100,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
+
+class VersionInformation(views.APIView):
+    def get(self, request):        
+        return Response({'version': settings.VERSION})
