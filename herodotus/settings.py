@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
+
+VERSION = '0.1.1'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -136,3 +139,7 @@ AUTH_USER_MODEL = 'herodotus.User'
 CORS_ORIGIN_ALLOW_ALL = True
 
 DATE_INPUT_FORMATS = ('%m/%d/%Y',)
+
+REST_KNOX = {
+  'TOKEN_TTL': timedelta(weeks=4),
+}
