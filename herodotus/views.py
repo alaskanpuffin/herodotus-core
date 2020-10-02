@@ -144,7 +144,6 @@ class ImportView(views.APIView):
         parsed = json.loads(uploadedContent)
 
         for article in parsed:
-            print(article['title'])
             contentObj = Content(title=article['title'], url=article['url'], content_type=article['content_type'], author=article['author'], publisher=article['publisher'], date=article['date'], content=article['content'], richtext=article['richtext'])
             contentObj.save()
 
