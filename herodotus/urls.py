@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path, include
-from .views import ContentViewSet, ScrapeArticle, CheckToken, UserViewSet, SearchContent, IndexArticles, FeedViewSet, VersionInformation
+from .views import ImportView, ExportView, ContentViewSet, ScrapeArticle, CheckToken, UserViewSet, SearchContent, IndexArticles, FeedViewSet, VersionInformation
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.routers import DefaultRouter
 
@@ -29,6 +29,8 @@ urlpatterns = [
     path('scrapearticle/', ScrapeArticle.as_view()),
     path('indexarticles/', IndexArticles.as_view()),
     path('version/', VersionInformation.as_view()),
+    path('export/', ExportView.as_view()),
+    path('import/', ImportView.as_view()),
     path('search/', SearchContent.as_view()),
     path('checktoken/', CheckToken.as_view()),
     path('', include(router.urls)),
