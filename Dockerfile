@@ -1,4 +1,4 @@
-FROM python:slim
+FROM python:3.8.5-slim
 
 RUN mkdir /app /app/data
 
