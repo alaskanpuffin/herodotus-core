@@ -1,22 +1,32 @@
-from .models import Content, User, Feed
-from .serializers import ContentSerializer, ScrapedArticleSerializer, UserSerializer, FeedSerializer
-from rest_framework import generics, viewsets, views
+from .models import Content, User, Feed, Tag
+from .serializers import ContentSerializer, ScrapedArticleSerializer, UserSerializer, FeedSerializer, TagSerializer
+from rest_framework import generics, viewsets, views, filters
 from rest_framework.response import Response
 from newspaper import Article
 from rest_framework import permissions
 from .pagination import ContentPagination
 import os
+import re
 from django.db.models import Case, When
 import meilisearch
 from django.conf import settings
 from django.http import HttpResponse
 import json
+from django.db.models import Q
 
 
 class ContentViewSet(viewsets.ModelViewSet):
     queryset = Content.objects.order_by('-id')
     serializer_class = ContentSerializer
     pagination_class = ContentPagination
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = Tag.objects.order_by('-title')
+    serializer_class = TagSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title']
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
@@ -33,15 +43,30 @@ class SearchContent(generics.ListCreateAPIView):
 
     def list(self, request):
         search_ids = []
+        tagObj = None
 
         search = request.GET.get('q')
+
+        tags_filter = []
+        tags = re.findall(r"\[([A-Za-z0-9_ ]+)\]", search)
+        search = re.sub(r"\[([A-Za-z0-9_ ]+)\]", "", search)
+        for tag in tags:
+            tags_filter.append('tags:%s' % tag)
 
         client = meilisearch.Client(
             os.environ['MEILI_SEARCH_URL'], os.environ['MEILI_SEARCH_MASTER_KEY'])
         index = client.get_or_create_index(
             'article', {'primaryKey': 'article_id'})
 
-        results = index.search(search)
+        if tags_filter:
+            results = index.search(search, {
+                'facetFilters': tags_filter,
+                'limit': 500,
+            })
+        else:
+            results = index.search(search, {
+                'limit': 500,
+            })
 
         for result in results['hits']:
             search_ids.append(result['article_id'])
@@ -53,7 +78,8 @@ class SearchContent(generics.ListCreateAPIView):
         paginator = ContentPagination()
         page = paginator.paginate_queryset(queryset, request)
 
-        serializer = ContentSerializer(page, many=True)
+        serializer = ContentSerializer(
+            page, many=True, context={'request': request})
         return paginator.get_paginated_response(serializer.data)
 
 
@@ -91,11 +117,19 @@ class IndexArticles(views.APIView):
         contentQuerySet = Content.objects.all()
 
         for article in contentQuerySet:
+            tags = []
+            for tag in article.tags.all():
+                tags.append(tag.title)
+
             documents.append({'article_id': article.id, 'content': article.content, 'title': article.title,
-                              'author': article.author, 'publisher': article.publisher, 'date': str(article.date)})
+                              'author': article.author, 'publisher': article.publisher, 'date': str(article.date), 'tags': tags})
 
         index.delete_all_documents()
         index.add_documents(documents)
+
+        client.get_index('article').update_attributes_for_faceting([
+            'tags',
+        ])
 
         return Response({'completed': True})
 
@@ -114,6 +148,7 @@ class VersionInformation(views.APIView):
     def get(self, request):
         return Response({'version': settings.VERSION})
 
+
 class ExportView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -131,20 +166,24 @@ class ExportView(views.APIView):
             'richtext': article.richtext,
         } for article in contentQuerySet]
 
-        response = HttpResponse(json.dumps(contentArray), content_type='text/json')
+        response = HttpResponse(json.dumps(contentArray),
+                                content_type='text/json')
         response['Content-Disposition'] = "attachment; filename=herodotus_export.json"
 
         return response
+
 
 class ImportView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        uploadedContent = request.FILES.get("content").read().decode('utf-8').replace("\n", '')
+        uploadedContent = request.FILES.get(
+            "content").read().decode('utf-8').replace("\n", '')
         parsed = json.loads(uploadedContent)
 
         for article in parsed:
-            contentObj = Content(title=article['title'], url=article['url'], content_type=article['content_type'], author=article['author'], publisher=article['publisher'], date=article['date'], content=article['content'], richtext=article['richtext'])
+            contentObj = Content(title=article['title'], url=article['url'], content_type=article['content_type'], author=article['author'],
+                                 publisher=article['publisher'], date=article['date'], content=article['content'], richtext=article['richtext'])
             contentObj.save()
 
         return HttpResponse("success")

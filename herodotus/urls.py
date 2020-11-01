@@ -15,12 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path, include
-from .views import ImportView, ExportView, ContentViewSet, ScrapeArticle, CheckToken, UserViewSet, SearchContent, IndexArticles, FeedViewSet, VersionInformation
+from .views import ImportView, ExportView, ContentViewSet, TagViewSet, ScrapeArticle, CheckToken, UserViewSet, SearchContent, IndexArticles, FeedViewSet, VersionInformation
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'content', ContentViewSet)
+router.register(r'tag', TagViewSet)
 router.register(r'user', UserViewSet)
 router.register(r'feed', FeedViewSet)
 
