@@ -40,6 +40,9 @@ class Command(BaseCommand):
                         title=article['title'], content_type="article", publisher=feed.title, content=article['content'], url=entry.link, author=article['author'][:300], date=date)
                     feedHistoryEntryObj = FeedHistory(feed=feed, url=entry.link)
                     try:
+                        pass
+                        articleObj.save()
+                        articleObj.tags.add(*feed.tags.all())
                         articleObj.save()
                         feedHistoryEntryObj.save() # Prevent duplicate pulls if an article is deleted.
                     except:
