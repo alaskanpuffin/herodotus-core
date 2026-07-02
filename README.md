@@ -1,3 +1,10 @@
+> 🚨 Archived & Deprecated
+> 
+> This project is no longer maintained.
+> All pre-built images have been deleted due to outdated and insecure depencies.
+>
+> If you still need to run Herodotus, you must build the Docker images manually from the source code.
+
 # Herodotus - Content Archival Software
 ![Herodotus](https://github.com/alaskanpuffin/herodotus-web/raw/master/src/assets/logo.png)
 
